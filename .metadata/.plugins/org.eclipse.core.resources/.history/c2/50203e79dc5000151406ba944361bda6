@@ -1,0 +1,8 @@
+
+public class Basket {
+	private int mySpeed;
+	public Basket(int speed) {
+		mySpeed = speed;
+	}
+	
+}

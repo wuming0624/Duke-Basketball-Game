@@ -1,0 +1,707 @@
+// This entire file is part of my masterpiece.
+// Wuming Zhang
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.stage.Stage;
+import javafx.scene.text.Text;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+
+
+
+
+class GoJahlil {
+    private String TITLE = "Go Jahlil!";
+    private int KEY_INPUT_SPEED = 40;
+    private double GROWTH_RATE = 1.1;
+    private int SPEED_COEFF = 50;
+    
+    private int PlusShot = 4;
+    private int MinusJustise = 10;
+    private int MinusGrayson = 5;
+    private int menuWidth = 1035;
+    private int menuHeight = 690;
+    private int offenseWidth = 1200;
+    private int offenseHeight = 675;
+    private int practiceWidth = 1024;
+    private int practiceHeight = 669;
+    
+
+    private Scene myScene;
+    private ArrayList<Basket> myBasket = new ArrayList<Basket>();
+    private ArrayList<Basket> myGrayson = new ArrayList<Basket>();
+    private ArrayList<Basket> myJustise = new ArrayList<Basket>();
+    private ArrayList<Basket> myPracticeBall = new ArrayList<Basket>();
+
+    private Basket myGameBall;
+   
+    private Basket myJa;
+    private Basket mySmallJa;
+    private Basket bang;
+    private Basket rejection;
+    private Basket reaper;
+    
+    private double myX; 
+    private double myY;
+    
+    private boolean checkIn = false;
+    private int stayTime;
+    private int stayTime2;
+    private int stayTime3;
+    private int myScore;
+    private int myMode;
+    private int myRecord;
+    
+    private Stage s;
+    
+    private Text t = new Text (550, 60, Integer.toString(myScore));
+    private Text tRec = new Text (500, 40, Integer.toString(myRecord));
+    
+    public GoJahlil(Stage s) {
+    	this.s = s;
+    	for (int i = 0; i <= 3; i++)
+    	{
+    		myBasket.add(new Basket(Math.random()*5+2, "basket.png", 1));
+    		myJustise.add(new Basket(Math.random()*5+2, "justise.png", 1));
+    	}
+    	
+    	for (int i = 0; i <= 7; i++)
+    	{
+    		myGrayson.add(new Basket(Math.random()*5+2, "grayson.png", 1));
+    	}   
+    	for (int i = 0; i <= 19; i++)
+    	{
+    		myPracticeBall.add(new Basket(Math.random()*3+1, "ball.png", 1));
+    	} 
+    }
+
+
+    /**
+     * Returns name of the game.
+     */
+    public String getTitle () {
+        return TITLE;
+    }
+
+    /**
+     * Create the game's scene
+     */
+    public Scene init (int width, int height, Stage sta) {
+    	myScore = 20;
+    	
+        Group root = new Group();
+        myScene = new Scene(root, width, height, Color.WHITE);
+        
+        putElements(root);
+
+        myGameBall = new Basket(10,"ball.png",1);
+   
+        rejection = new Basket(1, "rejection.png", 1);
+        rejection.getImage().setVisible(false);
+       
+        myJa = new Basket(1, "head.png", 1);
+        
+        bang = new Basket(1, "bang.png", 1);
+        bang.getImage().setVisible(false);
+        
+        reaper = new Basket(1, "reaper.png", 1);
+        reaper.getImage().setVisible(false);
+        
+        mySmallJa = new Basket(1, "smallhead.png", 1);
+        
+        myGameBall.getImage().setX(580);
+        myGameBall.getImage().setY(530);
+
+        for (int i = 0; i <= 3; i++)
+    	{
+    		myBasket.get(i).setMySpeed(Math.random()*3+1);
+    		myJustise.get(i).setMySpeed(Math.random()*4+2);
+    		myJustise.get(i).setMySpeedUpTimes(0);
+    		myJustise.get(i).setMyCoeff(20);
+    	}
+        
+        for (int i = 0; i <= 7; i++)
+    	{
+    		myGrayson.get(i).setMySpeed(Math.random()*4+2);
+    		myGrayson.get(i).setMySpeedUpTimes(0);
+    		myGrayson.get(i).setMyCoeff(20);
+    	}
+        
+        for (int i = 0; i <= 19; i++)
+    	{
+    		myPracticeBall.get(i).setMySpeed(Math.random()*1+1);
+    	} 
+
+
+        return myScene;
+    }
+
+
+	private void putElements(Group root) {
+		Canvas canvas = new Canvas( menuWidth, menuHeight );
+        root.getChildren().add( canvas );
+        
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        
+        Image background = new Image( "Jahlil1.jpg" );
+        gc.drawImage( background, 0, 0 );
+        
+        Image logo = new Image("logo3.png");
+        gc.drawImage( logo, 0, 32 );
+        
+        addButton1(root);
+        addButton2(root);
+	}
+
+
+	private void addButton2(Group root) {
+		Button btn2 = new Button();
+        btn2.setText("Practice Mode");
+        btn2.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+            	myMode = 2;
+            	s.setScene(PracticeScene(s));
+            }
+        });
+        
+        
+        btn2.setLayoutX(50);
+        btn2.setLayoutY(340);
+        
+        root.getChildren().add(btn2);
+	}
+
+
+	private void addButton1(Group root) {
+		Button btn1 = new Button();
+        btn1.setText("Offense Mode");
+        btn1.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+            	myMode = 1;
+            	s.setScene(OffenseScene(s));
+            }
+        });
+        
+        btn1.setLayoutX(50);
+        btn1.setLayoutY(300);
+        
+        root.getChildren().add(btn1);
+	}
+    
+
+    public Scene ResultScene(Stage sta, int width, int height, String str){
+    	
+    	Group root = new Group();
+    	setupScene(root, width, height, str);
+        myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+        myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
+        
+    	return myScene;
+    }
+    	
+    public Scene PracticeScene(Stage sta)
+    {
+    	Group root = new Group();
+        
+    	setupScene(root,practiceWidth,practiceHeight,"Stadium.jpg");
+        
+        for (int i = 0; i <= 19; i++)
+        {
+        	myPracticeBall.get(i).getImage().setX(practiceWidth*Math.random());
+        	myPracticeBall.get(i).getImage().setY(400*Math.random());
+        }
+        for (int i = 0; i <= 19; i++)
+        {
+        	root.getChildren().add(myPracticeBall.get(i).getImage());
+        }
+        mySmallJa.getImage().setX(512);
+        mySmallJa.getImage().setY(610);
+        root.getChildren().add(mySmallJa.getImage());
+        
+        root.getChildren().add(tRec);
+        
+        
+        myScene.setOnKeyPressed(e -> handleKeyInput2(e.getCode()));
+    	return myScene;	
+    }
+    
+	public Scene OffenseScene(Stage sta) {
+
+    	Group root = new Group();
+        
+    	setupScene(root,offenseWidth,offenseHeight,"Offense.png");
+        
+        resetBasket();
+        resetGrayson();
+        resetJustise();
+               
+        myJa.getImage().setX(600 -myJa.getImage().getBoundsInLocal().getWidth() / 2);
+        myJa.getImage().setY(610 - myJa.getImage().getBoundsInLocal().getHeight() / 2); 
+        
+        myGameBall.getImage().setX(myJa.getImage().getX());
+        myGameBall.getImage().setY(myJa.getImage().getY());
+        rootAdd(root);
+        
+        myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+        myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
+        return myScene;
+    }
+
+
+	private void rootAdd(Group root) {
+		for (int j = 0; j <= 3; j++)
+        {
+        	root.getChildren().add(myBasket.get(j).getImage());
+        	root.getChildren().add(myJustise.get(j).getImage());
+        }
+        
+        for (int j = 0; j <= 7; j++)
+        {
+        	root.getChildren().add(myGrayson.get(j).getImage());
+        }
+
+        root.getChildren().add(myJa.getImage());
+        root.getChildren().add(myGameBall.getImage());
+        root.getChildren().add(bang.getImage());
+        root.getChildren().add(rejection.getImage());
+        root.getChildren().add(reaper.getImage());
+	}
+
+
+	private void setupScene(Group root,int width, int height, String str) {
+		myScene = new Scene(root, width, height, Color.WHITE);
+   	
+    	root.getChildren().add(t);
+    	
+        Canvas canvas = new Canvas( width, height );
+        root.getChildren().add( canvas );
+        
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        
+        Image img = new Image( str );
+        gc.drawImage( img, 0, 0 );
+        
+        
+	}
+
+
+	private void resetJustise() {
+		for (int i = 0; i <= 3; i++)
+        {
+        	myJustise.get(i).getImage().setX(280*i+280*Math.random());
+        	myJustise.get(i).getImage().setY(650);  
+        	myJustise.get(i).getImage().setVisible(false);
+        }
+	}
+
+
+	private void resetGrayson() {
+		for (int i = 0; i <= 7; i++)
+        {
+        	myGrayson.get(i).getImage().setX(145*i+145*Math.random());
+        	myGrayson.get(i).getImage().setY(0);
+        }
+	}
+
+
+	private void resetBasket() {
+		for (int i = 0; i <= 3; i++)
+        {
+        	myBasket.get(i).getImage().setX(280*i+280*Math.random());
+        	myBasket.get(i).getImage().setY(0);  
+        	
+        }
+	}
+    
+
+    public void setEnemySpeedCoeff(int c, ArrayList b, int num){
+    	for (int i = 0; i <= num-1; i++)
+    	{
+    		((Basket) b.get(i)).setMyCoeff(c);
+    	}
+    }
+    
+    public void step (double elapsedTime) {
+        // update the score
+    	if (myMode == 1)
+    	{
+    		stepOffense(elapsedTime);
+    	}
+    	if (myMode == 2)
+    	{
+    		stepPractice(elapsedTime);
+    	}
+    }
+
+    private void stepPractice(double elapsedTime) {
+    	
+    	displayText(tRec, Integer.toString(myRecord/60)+" s", 50);
+    	
+    	for (int i = 0; i <= 19; i++)
+    	{
+    		if (Math.floorMod(myRecord, 300) == 0)
+    		{
+    			myPracticeBall.get(i).setMySpeed(myPracticeBall.get(i).getMySpeed() + 0.5);
+    		}
+    		if (myPracticeBall.get(i).getImage().getX() < 0 || myPracticeBall.get(i).getImage().getX() > practiceWidth - myPracticeBall.get(i).getImage().getBoundsInLocal().getWidth()/2)
+    		{
+    			myPracticeBall.get(i).setXDirection(myPracticeBall.get(i).getXDirection()*(-1));
+    		}
+    		if (myPracticeBall.get(i).getImage().getY() < 0 || myPracticeBall.get(i).getImage().getY() > practiceHeight - myPracticeBall.get(i).getImage().getBoundsInLocal().getHeight()/2)
+    		{
+    			myPracticeBall.get(i).setYDirection(myPracticeBall.get(i).getYDirection()*(-1));
+    		}
+    		myPracticeBall.get(i).getImage().setX( myPracticeBall.get(i).getImage().getX() + myPracticeBall.get(i).getXDirection() * myPracticeBall.get(i).getMySpeed() * SPEED_COEFF * elapsedTime);
+    		myPracticeBall.get(i).getImage().setY( myPracticeBall.get(i).getImage().getY() + myPracticeBall.get(i).getYDirection() * myPracticeBall.get(i).getMySpeed() * SPEED_COEFF * elapsedTime);
+    		
+    		if (myPracticeBall.get(i).getImage().getLayoutBounds().intersects(mySmallJa.getImage().getBoundsInLocal()))
+    		{
+    			myRecord = 0;
+    			s.setScene(ResultScene(s, 1152, 677, "Lose.jpg"));
+    		}
+     	}
+    	
+    	myRecord++;
+    	
+    }
+
+	private void displayText(Text text, String str, int num) {
+		text.setText(str);
+    	text.setFont(Font.font ("Verdana",FontWeight.BOLD, num));
+    	text.setFill(Color.DARKBLUE);
+	}
+	
+	private void stepOffense(double elapsedTime) {
+		if (myScore >= 100)
+    	{
+    		s.setScene(ResultScene(s, offenseWidth, offenseHeight, "Win.jpg"));
+    	}
+    	if (myScore < 0)
+    	{
+    		s.setScene(ResultScene(s, 1152, 677, "Lose.jpg"));
+    	}
+    	
+    	setEnemySpeedCoeff(myScore,myGrayson,8);
+    	setEnemySpeedCoeff(myScore-50,myJustise,4);
+    	
+    	displayText(t, Integer.toString(myScore),40);
+    	// update attributes
+    	bang.getImage().setVisible(false);
+    	rejection.getImage().setVisible(false);
+    	
+    	stayTime = keepDisp(stayTime, bang, 20);
+    	stayTime2 = keepDisp(stayTime2, rejection, 20);
+    	stayTime3 = keepDisp(stayTime3, reaper, 60);
+    	
+    	for (int k = 0; k <= 3; k++)
+    	{
+    		setMyY(elapsedTime, k, myBasket, 1);
+      	}
+    	
+    	if (myScore > 70)
+		{
+    		for (int k = 0; k <= 3; k++)
+    		{
+    			myJustise.get(k).getImage().setVisible(true);
+    			setMyY(elapsedTime, k, myJustise, 1);
+    		}
+		}
+    	else
+		{
+    		for (int k = 0; k <= 3; k++)
+    		{
+    			myJustise.get(k).getImage().setY(700);
+    			myJustise.get(k).getImage().setVisible(false);
+    		}
+		}
+    	
+    	
+    	for (int k = 0; k <= 7; k++)
+    	{
+    		setMyY(elapsedTime, k, myGrayson, 1);
+    		if (myScore > 85)
+    		{
+    			myGrayson.get(k).getImage().setX(myGrayson.get(k).getImage().getX() + (Math.random()*6-3)*myGrayson.get(k).getMySpeed() * SPEED_COEFF * elapsedTime);
+    		}
+     	}
+    	
+        myGameBall.getImage().setRotate(myGameBall.getImage().getRotate()+1);
+        
+        double xDiff = myX - (myJa.getImage().getX() + myJa.getImage().getFitWidth());
+        double yDiff = myY - (myJa.getImage().getY() + myJa.getImage().getFitHeight());
+        double lDiff = Math.sqrt(xDiff*xDiff+yDiff*yDiff);
+        
+        for (int l = 0; l <= 3; l++)
+        {
+        	resetObject(l, myBasket, 280, 2000);      	
+        }
+        for (int l = 0; l <= 3; l++)
+        {
+	        if (myScore > 70)
+	    	{
+	        	resetObject(l, myJustise, 280, 1000);
+	    	}
+        }
+        
+        for (int l = 0; l <= 7; l++)
+        {
+        	resetObject(l,myGrayson,145,700);
+        }        
+        if (checkIn == false)
+        {
+        	if (myGameBall.getImage().getX() <= 0 || myGameBall.getImage().getX() > offenseWidth || myGameBall.getImage().getY() <= 0 || myGameBall.getImage().getY() > offenseWidth)
+        	{
+        		myGameBall.getImage().setX(myJa.getImage().getX());
+        		myGameBall.getImage().setY(myJa.getImage().getY());
+        		checkIn = true;
+        	}
+        }        
+        if (myX > 0 && myY > 0 && checkIn == false)
+        {
+        	myGameBall.getImage().setX(myGameBall.getImage().getX() + myGameBall.getMySpeed() * 3 * (xDiff / lDiff) * SPEED_COEFF * elapsedTime);
+        	myGameBall.getImage().setY(myGameBall.getImage().getY() + myGameBall.getMySpeed() * 3 * (yDiff / lDiff) * SPEED_COEFF * elapsedTime);
+        }        
+        for (int m = 0; m <= 3; m++)
+        {
+        	if (Math.abs( (myGameBall.getImage().getX()+myGameBall.getImage().getBoundsInLocal().getWidth()/2) - (myBasket.get(m).getImage().getX() + myBasket.get(m).getImage().getBoundsInLocal().getWidth()/2) ) < 45 && Math.abs( (myGameBall.getImage().getY()+myGameBall.getImage().getBoundsInLocal().getHeight()/2) - (myBasket.get(m).getImage().getY() + myBasket.get(m).getImage().getBoundsInLocal().getHeight()/2) )  < 45)
+    		{
+            	facyEffect(m, bang, myBasket, 280);
+            	stayTime++;
+            	myScore = myScore+PlusShot;
+    		}
+        }        
+        for (int m = 0; m <=7; m++)
+        {
+        	if (Math.abs( (myGameBall.getImage().getX()+myGameBall.getImage().getBoundsInLocal().getWidth()/2) - (myGrayson.get(m).getImage().getX() + myGrayson.get(m).getImage().getBoundsInLocal().getWidth()/2) ) < 45 && Math.abs( (myGameBall.getImage().getY()+myGameBall.getImage().getBoundsInLocal().getHeight()/2) - (myGrayson.get(m).getImage().getY() + myGrayson.get(m).getImage().getBoundsInLocal().getHeight()/2) )  < 45)
+        	{
+        		if (myGameBall.getImage().getX() == myJa.getImage().getX() && myGameBall.getImage().getY() == myJa.getImage().getY())
+            	{
+        			stayTime3++;
+            		myScore = myScore - MinusGrayson;
+            	}        		
+        		facyEffect(m, rejection, myGrayson, 145);
+            	stayTime2++;
+            }
+        }
+        
+        if (myScore > 70)
+        {
+	        for (int m = 0; m <=3; m++)
+	        {
+	        	if (Math.abs( (myGameBall.getImage().getX()+myGameBall.getImage().getBoundsInLocal().getWidth()/2) - (myJustise.get(m).getImage().getX() + myJustise.get(m).getImage().getBoundsInLocal().getWidth()/2) ) < 45 && Math.abs( (myGameBall.getImage().getY()+myGameBall.getImage().getBoundsInLocal().getHeight()/2) - (myJustise.get(m).getImage().getY() + myJustise.get(m).getImage().getBoundsInLocal().getHeight()/2) )  < 45)
+	        	{
+	        		if (myGameBall.getImage().getX() == myJa.getImage().getX() && myGameBall.getImage().getY() == myJa.getImage().getY())
+	            	{
+	        			stayTime3++;
+	            		myScore = myScore - MinusJustise;
+	            	}     		
+	        		facyEffect(m, rejection, myJustise, 280);
+	            	stayTime2++;
+	            }
+	        }
+        }     
+	}
+
+
+	private void facyEffect(int m, Basket b, ArrayList<Basket> a, int num) {
+		b.getImage().setX(a.get(m).getImage().getX() + a.get(m).getImage().getBoundsInLocal().getWidth()/2 - b.getImage().getBoundsInLocal().getWidth()/2);
+		b.getImage().setY(a.get(m).getImage().getY() + a.get(m).getImage().getBoundsInLocal().getHeight()/2 - b.getImage().getBoundsInLocal().getHeight()/2);
+		b.getImage().setVisible(true);
+		myGameBall.getImage().setX(myJa.getImage().getX());
+		myGameBall.getImage().setY(myJa.getImage().getY());
+		checkIn = true;
+		
+		a.get(m).getImage().setX(num*m+num*Math.random());
+		a.get(m).getImage().setY(0);
+		a.get(m).setMySpeed(4*Math.random()+2);
+	}
+
+
+	private void resetObject(int l, ArrayList<Basket> a, int num, int num2) {
+		if (a.get(l).getImage().getY() > num2)
+		{
+			a.get(l).getImage().setX(num*l+num*Math.random());
+			a.get(l).getImage().setY(0);
+			a.get(l).setMySpeed(4*Math.random()+2);
+		}
+	}
+
+
+	private void setMyY(double elapsedTime, int k, ArrayList<Basket> b, double coeff) {
+		b.get(k).getImage().setY(b.get(k).getImage().getY() + coeff * b.get(k).getMySpeed() * SPEED_COEFF * elapsedTime);
+	}
+
+
+	private int keepDisp(int time, Basket b, int num) {
+		if (time > 0 && time < num)
+    	{
+    		b.getImage().setVisible(true);
+    		if (num == 60)
+    		{
+    			b.getImage().setX(myScene.getWidth()/2 - b.getImage().getBoundsInLocal().getWidth()/2);
+    			b.getImage().setY(myScene.getHeight()/2 - b.getImage().getBoundsInLocal().getHeight()/2);
+    		}
+    		else
+    		{
+    			b.getImage().setX(b.getImage().getX());
+    			b.getImage().setY(b.getImage().getY());
+    		}
+    		time++;
+    	}
+    	else
+    	{
+    		b.getImage().setVisible(false);
+    		if (time >= num)
+    		{
+    			time = 0;
+    		}
+    	}
+		return time;
+	}
+
+
+	private void makeItStay(int Time, ImageView myView) {
+		if (Time > 0 && Time < 20)
+    	{
+    		myView.setVisible(true);
+    		myView.setX(myView.getX());
+    		myView.setY(myView.getY());
+    		Time++;
+    	}
+    	else
+    	{
+    		myView.setVisible(false);
+    		if (Time >= 20)
+    		{
+    			Time = 0;
+    			myView.setVisible(false);
+    		}
+    	}
+	}
+
+    private void handleKeyInput (KeyCode code) {
+        switch (code) {
+            case D:
+            	if (myJa.getImage().getX() == myGameBall.getImage().getX() && myJa.getImage().getY() == myGameBall.getImage().getY())
+                {
+            		myJa.getImage().setX(myJa.getImage().getX() + KEY_INPUT_SPEED); 
+            		myGameBall.getImage().setX(myJa.getImage().getX());
+                }
+            	else
+            	{
+            		myJa.getImage().setX(myJa.getImage().getX() + KEY_INPUT_SPEED);
+            	}
+                
+                break;
+            case A:
+            	if (myJa.getImage().getX() == myGameBall.getImage().getX() && myJa.getImage().getY() == myGameBall.getImage().getY())
+                {
+            		myJa.getImage().setX(myJa.getImage().getX() - KEY_INPUT_SPEED); 
+            		myGameBall.getImage().setX(myJa.getImage().getX());
+                }
+            	else
+            	{
+            		myJa.getImage().setX(myJa.getImage().getX() - KEY_INPUT_SPEED);
+            	}
+                break;
+            case W:
+            	if (myJa.getImage().getX() == myGameBall.getImage().getX() && myJa.getImage().getY() == myGameBall.getImage().getY())
+                {
+            		myJa.getImage().setY(myJa.getImage().getY() - KEY_INPUT_SPEED); 
+            		myGameBall.getImage().setY(myJa.getImage().getY());
+                }
+            	else
+            	{
+            		myJa.getImage().setY(myJa.getImage().getY() - KEY_INPUT_SPEED);
+            	}
+                break;
+            case S:
+            	if (myJa.getImage().getX() == myGameBall.getImage().getX() && myJa.getImage().getY() == myGameBall.getImage().getY())
+                {
+            		myJa.getImage().setY(myJa.getImage().getY() + KEY_INPUT_SPEED); 
+            		myGameBall.getImage().setY(myJa.getImage().getY());
+                }
+            	else
+            	{
+            		myJa.getImage().setY(myJa.getImage().getY() - KEY_INPUT_SPEED);
+            	}
+                break;
+            case ESCAPE:
+            	s.setScene(init(menuWidth,menuHeight,s));
+            	myMode = 0;
+                break;
+            case UP:            	
+        		PlusShot = 10;            		               
+        		break;
+            case DOWN:            	
+        		PlusShot = 4;            		               
+        		break;
+            case LEFT:            	
+        		SPEED_COEFF = 10;            		               
+        		break;
+            case RIGHT:            	
+            	SPEED_COEFF  = 50;            		               
+        		break;
+            default:
+
+        }
+    }
+    
+    private void handleKeyInput2 (KeyCode code) {
+        switch (code) {
+            case D:            	
+            		mySmallJa.getImage().setX(mySmallJa.getImage().getX() + KEY_INPUT_SPEED);             		               
+                break;
+            case A:
+            		mySmallJa.getImage().setX(mySmallJa.getImage().getX() - KEY_INPUT_SPEED);
+                break;
+            case W:
+            		mySmallJa.getImage().setY(mySmallJa.getImage().getY() - KEY_INPUT_SPEED);
+                break;
+            case S:
+            		mySmallJa.getImage().setY(mySmallJa.getImage().getY() + KEY_INPUT_SPEED); 
+            	break;
+            case ESCAPE:
+            	s.setScene(init(menuWidth,menuHeight,s));
+            	myMode = 0;
+                break;
+
+            default:
+
+        }
+    }
+
+    // What to do each time a key is pressed
+    private void handleMouseInput (double x, double y) {
+    	if (myJa.getImage().getX() == myGameBall.getImage().getX() && myJa.getImage().getY() == myGameBall.getImage().getY())
+    	{
+    		myScore = myScore - 1;
+    		myX = x;
+    		myY = y;
+    	}
+    	
+    	checkIn = false;
+     
+    }
+}
+
+

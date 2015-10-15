@@ -1,0 +1,21 @@
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+public class Basket {
+	private int mySpeed;
+	private Image myImage;
+	private ImageView myBasket;
+	
+	public Basket(double speed) {
+		mySpeed = speed;
+		myImage = new Image(getClass().getClassLoader().getResourceAsStream("basket.png"));
+		myBasket = new ImageView(myImage);
+	}	
+	public int getMySpeed(){
+		return mySpeed;
+	}
+	public ImageView getImage(){
+		return myBasket;
+	}
+
+}

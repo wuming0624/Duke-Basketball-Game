@@ -1,0 +1,6 @@
+1441574765300	Extract method 'initGameObjects'
+1441578034439	Extract method 'resetToDefault'
+1441588567510	Extract method 'getAttacked'
+1441598902120	Extract method 'checkWinOrLose'
+1441599483792	Extract method 'setObjectMovement'
+1441599774669	Extract method 'resetObjectPosition'

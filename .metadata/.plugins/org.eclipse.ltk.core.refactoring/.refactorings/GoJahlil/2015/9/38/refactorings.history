@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;c&apos; in &apos;GameObject.setMyCoeff(...)&apos; to &apos;coefficient&apos;&#x0D;&#x0A;- Original project: &apos;GoJahlil&apos;&#x0D;&#x0A;- Original element: &apos;GameObject.setMyCoeff(int).c&apos;&#x0D;&#x0A;- Renamed element: &apos;c&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;c&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;{GameObject.java[GameObject~setMyCoeff~I@c!1145!1149!1149!1149!I!0!true" name="coefficient" references="true" stamp="1442262512564" version="1.0"/>
+</session>

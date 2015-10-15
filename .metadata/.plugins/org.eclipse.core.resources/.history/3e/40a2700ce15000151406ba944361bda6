@@ -1,0 +1,278 @@
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.stage.Stage;
+
+
+/**
+ * Separate the game code from some of the boilerplate code.
+ * 
+ * @author Robert C. Duvall
+ */
+class GoJahlil {
+    public static final String TITLE = "Example JavaFX";
+    public static final int KEY_INPUT_SPEED = 5;
+    private static final double GROWTH_RATE = 1.1;
+    private static final int BOUNCER_SPEED = 200;
+
+    private Scene myScene;
+    private Basket myBasket1;
+    private Basket myBasket2;
+    private Basket myBasket3;
+    private Basket myBasket4;
+    private Basket myBasket5;
+    private Basket myBasket6;
+    private Basket myBasket7;
+    private Basket myBasket8;
+   
+    private ImageView myJa;
+    private Rectangle myTopBlock;
+    private Rectangle myBottomBlock;
+
+
+    /**
+     * Returns name of the game.
+     */
+    public String getTitle () {
+        return TITLE;
+    }
+
+    /**
+     * Create the game's scene
+     */
+    public Scene init (int width, int height, Stage sta) {
+        // Create a scene graph to organize the scene
+        Group root = new Group();
+        // Create a place to see the shapes
+        myScene = new Scene(root, width, height, Color.WHITE);
+        
+        Canvas canvas = new Canvas( 1035, 690 );
+        root.getChildren().add( canvas );
+        
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        
+        Image background = new Image( "Jahlil1.jpg" );
+        gc.drawImage( background, 0, 0 );
+        
+        Image logo = new Image("logo3.png");
+        gc.drawImage( logo, 0, 32 );
+        
+        Button btn1 = new Button();
+        btn1.setText("Offense Mode");
+        btn1.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+            	sta.setScene(OffenseScene());
+                System.out.println("Hello World!");
+            }
+        });
+        
+        btn1.setLayoutX(50);
+        btn1.setLayoutY(300);
+        
+        root.getChildren().add(btn1);
+        
+        Button btn2 = new Button();
+        btn2.setText("Defense Mode");
+        btn2.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Hello World!");
+            }
+        });
+        
+        
+        btn2.setLayoutX(50);
+        btn2.setLayoutY(340);
+        
+        root.getChildren().add(btn2);
+        // Make some shapes and set their properties
+        Image image = new Image(getClass().getClassLoader().getResourceAsStream("basket.png"));
+        myBasket1 = new Basket(5);
+        myBasket2 = new Basket(3);
+        myBasket3 = new Basket(4);
+        myBasket4 = new Basket(1);
+        myBasket5 = new Basket(2);
+        myBasket6 = new Basket(5);
+        myBasket7 = new Basket(2);
+        myBasket8 = new Basket(1);
+        
+        // x and y represent the top left corner, so center it
+        myTopBlock = new Rectangle(width / 2 - 25, height / 2 - 100, 50, 50);
+        myTopBlock.setFill(Color.RED);
+        myBottomBlock = new Rectangle(width / 2 - 25, height / 2 + 50, 50, 50);
+        myBottomBlock.setFill(Color.BISQUE);
+        
+        Image image2 = new Image(getClass().getClassLoader().getResourceAsStream("head.png"));
+        myJa = new ImageView(image2);
+        // order added to the group is the order in whuch they are drawn
+//        root.getChildren().add(myBasket1);
+//        root.getChildren().add(myBasket2);
+//        root.getChildren().add(myBasket3);
+//        root.getChildren().add(myBasket4);
+//        root.getChildren().add(myBasket5);
+//        root.getChildren().add(myBasket6);
+//        root.getChildren().add(myBasket7);
+//        root.getChildren().add(myBasket8);
+        
+//        root.getChildren().add(myTopBlock);
+//        root.getChildren().add(myBottomBlock);
+//        root.getChildren().add(myJa);
+        // Respond to input
+        myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+        myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
+        return myScene;
+    }
+    
+    /**
+     * Offense scene
+     */
+
+    protected Scene OffenseScene() {
+    	Group root = new Group();
+        
+    	myScene = new Scene(root, 1200, 675, Color.WHITE);
+    	
+        Canvas canvas = new Canvas( 1200, 675 );
+        root.getChildren().add( canvas );
+        
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        
+        Image offenseImage = new Image( "Offense.png" );
+        gc.drawImage( offenseImage, 0, 0 );
+        
+        Image image = new Image(getClass().getClassLoader().getResourceAsStream("basket.png"));
+//        myBasket1 = new ImageView(image);
+//        myBasket2 = new ImageView(image);
+//        myBasket3 = new ImageView(image);
+//        myBasket4 = new ImageView(image);
+//        myBasket5 = new ImageView(image);
+//        myBasket6 = new ImageView(image);
+//        myBasket7 = new ImageView(image);
+//        myBasket8 = new ImageView(image);
+        
+        myBasket1.getImage().setX(1200 * 1 / 8 - myBasket1.getImage().getBoundsInLocal().getWidth() / 2);
+        myBasket1.getImage().setY(0);
+        myBasket2.getImage().setX(1200 * 2 / 8 - myBasket2.getImage().getBoundsInLocal().getWidth() / 2);
+        myBasket2.getImage().setY(0);
+        myBasket3.getImage().setX(1200 * 3 / 8 - myBasket3.getImage().getBoundsInLocal().getWidth() / 2);
+        myBasket3.getImage().setY(0);
+        myBasket4.getImage().setX(1200 * 4 / 8 - myBasket4.getImage().getBoundsInLocal().getWidth() / 2);
+        myBasket4.getImage().setY(0);
+        myBasket5.getImage().setX(1200 * 5 / 8 - myBasket5.getImage().getBoundsInLocal().getWidth() / 2);
+        myBasket5.getImage().setY(0);
+        myBasket6.getImage().setX(1200 * 6 / 8 - myBasket6.getImage().getBoundsInLocal().getWidth() / 2);
+        myBasket6.getImage().setY(0);
+        myBasket7.getImage().setX(1200 * 7 / 8 - myBasket7.getImage().getBoundsInLocal().getWidth() / 2);
+        myBasket7.getImage().setY(0);
+        myBasket8.getImage().setX(1200 * 8 / 8 - myBasket8.getImage().getBoundsInLocal().getWidth() / 2);
+        myBasket8.getImage().setY(0);
+        
+        myJa.setX(600-myJa.getBoundsInLocal().getWidth() / 2);
+        myJa.setY(610  - myJa.getBoundsInLocal().getHeight() / 2); 
+        
+        
+        
+        myTopBlock = new Rectangle(1200 / 2 - 25, 675 / 2 - 100, 50, 50);
+        myTopBlock.setFill(Color.RED);
+        myBottomBlock = new Rectangle(1200 / 2 - 25, 675 / 2 + 50, 50, 50);
+        myBottomBlock.setFill(Color.BISQUE);
+        // order added to the group is the order in whuch they are drawn
+        root.getChildren().add(myBasket1.getImage());
+        root.getChildren().add(myBasket2.getImage());
+        root.getChildren().add(myBasket3.getImage());
+        root.getChildren().add(myBasket4.getImage());
+        root.getChildren().add(myBasket5.getImage());
+        root.getChildren().add(myBasket6.getImage());
+        root.getChildren().add(myBasket7.getImage());
+        root.getChildren().add(myBasket8.getImage());
+        root.getChildren().add(myTopBlock);
+        root.getChildren().add(myBottomBlock);
+        root.getChildren().add(myJa);
+        // Respond to input
+        myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+        myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
+        
+        
+        return myScene;
+    }
+    
+    /**
+     * Change properties of shapes to animate them
+     * 
+     * Note, there are more sophisticated ways to animate shapes,
+     * but these simple ways work too.
+     */
+    public void step (double elapsedTime) {
+        // update attributes
+        myBasket1.getImage().setY(myBasket1.getImage().getY() + myBasket1.getMySpeed() * BOUNCER_SPEED * elapsedTime);
+        myBasket2.getImage().setY(myBasket2.getImage().getY() + myBasket2.getMySpeed() * BOUNCER_SPEED * elapsedTime);
+        myBasket3.getImage().setY(myBasket3.getImage().getY() + myBasket3.getMySpeed() * BOUNCER_SPEED * elapsedTime);
+        myBasket4.getImage().setY(myBasket4.getImage().getY() + myBasket4.getMySpeed() * BOUNCER_SPEED * elapsedTime);
+        myBasket5.getImage().setY(myBasket5.getImage().getY() + myBasket5.getMySpeed() * BOUNCER_SPEED * elapsedTime);
+        myBasket6.setY(myBasket6.getImage().getY() + speed6 * BOUNCER_SPEED * elapsedTime);
+        myBasket7.setY(myBasket7.getImage().getY() + speed7 * BOUNCER_SPEED * elapsedTime);
+        myBasket8.setY(myBasket8.getImage().getY() + speed8 * BOUNCER_SPEED * elapsedTime);
+        myTopBlock.setRotate(myBottomBlock.getRotate() - 1);
+        myBottomBlock.setRotate(myBottomBlock.getRotate() + 1);
+        myJa.setRotate(myJa.getRotate() - 1);
+        
+        // check for collisions
+        // with shapes, can check precisely
+        Shape intersect = Shape.intersect(myTopBlock, myBottomBlock);
+        if (intersect.getBoundsInLocal().getWidth() != -1) {
+            myTopBlock.setFill(Color.MAROON);
+        }
+        else {
+            myTopBlock.setFill(Color.RED);
+        }
+        // with images can only check bounding box
+        if (myBottomBlock.getBoundsInParent().intersects(myBasket1.getImage().getBoundsInParent())) {
+            myBottomBlock.setFill(Color.BURLYWOOD);
+        }
+        else {
+            myBottomBlock.setFill(Color.BISQUE);
+        }
+    }
+
+
+    // What to do each time a key is pressed
+    private void handleKeyInput (KeyCode code) {
+        switch (code) {
+            case RIGHT:
+                myJa.setX(myJa.getX() + KEY_INPUT_SPEED);
+                break;
+            case LEFT:
+                myJa.setX(myJa.getX() - KEY_INPUT_SPEED);
+                break;
+//            case UP:
+//                myJa.setY(myJa.getY() - KEY_INPUT_SPEED);
+//                break;
+//            case DOWN:
+//                myJa.setY(myJa.getY() + KEY_INPUT_SPEED);
+//                break;
+            default:
+                // do nothing
+        }
+    }
+
+    // What to do each time a key is pressed
+    private void handleMouseInput (double x, double y) {
+        if (myBottomBlock.contains(x, y)) {
+            myBottomBlock.setScaleX(myBottomBlock.getScaleX() * GROWTH_RATE);
+            myBottomBlock.setScaleY(myBottomBlock.getScaleY() * GROWTH_RATE);
+        }
+    }
+}

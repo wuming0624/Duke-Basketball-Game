@@ -1,0 +1,20 @@
+Name: Wuming Zhang
+NetID: wz48
+
+Genre: Top Down Scrolling Shooter
+
+Name: Go Jahlil!
+
+Background: 
+As we all know, basketball is the one and only reason that students choose Duke for college. Although Duke just finished a historical season with the National Championship Title, the star player Jahlil Okafor was struggling with his free throw all season long. In order to fully prepare for his NBA career, he was working hard on his shooting this summer, not only the free throw, but the moving jump shot as well. The greatest Coach K designed a special training program with moving baskets and defenders. Can he achieve this task?
+
+Modes & Goals: There will be an offense mode and a practice mode. In the offense mode, the player will try to make the basket and avoid the defender. If the player makes 100 baskets without running out of the balls, he wins. In the practice mode, the player will try to avoid touching the balls as long as possible. 
+
+Mechanics: 
+In the offense mode, the player will get 20 balls in the beginning. The player can only move along four directions along using the keyboard and shoot the ball by clicking the mouse to wherever he wants to shoot. When the defenders show up on the screen, the player has to either avoid it by moving left and right or use the ball to knock over the defender. The baskets come towards the player at the same time as the defenders. The shot will be blocked if the defender is on the path of your shot to the basket. The total number of the balls decreases whenever the player uses a ball. Each time the player makes a basket, he gains three new balls, whereas each time the player touches a defender without shooting the ball, he loses 5 points. The speed of the defenders will increase as the game goes forward and there will be new character & new moving patterns appear. Player wins when he gets 100 balls.
+
+
+
+
+
+
